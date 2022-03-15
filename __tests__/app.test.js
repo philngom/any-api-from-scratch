@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const Song = require('../lib/models/Song');
 
 describe('any-api-from-scratch routes', () => {
   beforeEach(() => {
@@ -23,5 +24,13 @@ describe('any-api-from-scratch routes', () => {
       songName: 'Way too big',
       yearReleased: 2020
     })
+  });
+
+  it('should get all songs from db', async () => {
+    const expected = await Song.getAllSongs();
+    const res = await request(app)
+    .get('/api/v1/songs');
+
+    expect(res.body).toEqual(expected);
   });
 });

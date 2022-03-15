@@ -7,4 +7,4 @@ CREATE TABLE songs (
   artist TEXT NOT NULL,
   song_name TEXT NOT NULL,
   year_released INT NOT NULL
-)
+);
