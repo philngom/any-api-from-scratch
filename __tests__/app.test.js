@@ -42,10 +42,22 @@ describe('any-api-from-scratch routes', () => {
   });
 
   it('should update a song by id', async () => {
-    const song = await Song.insert(({ artist: 'Burna Boy', songName: 'Way too big', yearReleased: 2020 }));
-    const res = await request(app).patch(`/api/v1/songs/${song.id}`).send({ songName: 'Real Life', yearReleased: 2020});
+    const song = await Song.insert({ artist: 'Burna Boy', songName: 'Way too big', yearReleased: 2020 });
 
-    const expected = { artist: 'Burna Boy', songName: 'Real Life', yearReleased: 2020 }
+    const expected = { id: expect.any(String), artist: 'Burna Boy', songName: 'Real Life', yearReleased: 2021 }
+
+    const res = await request(app).patch(`/api/v1/songs/${song.id}`).send({ songName: 'Real Life', yearReleased: 2021});
+
     expect(res.body).toEqual(expected);
+  })
+
+  it('should delete a song', async () => {
+
+    const song = await Song.insert({ artist: 'Burna Boy', songName: 'Way too big', yearReleased: 2020 });
+
+    const res = await request(app).delete(`/api/v1/songs/${song.id}`);
+
+    expect(res.body).toEqual(song);
+    expect(await Song.getSong(song.id)).toBeNull();
   })
 });
